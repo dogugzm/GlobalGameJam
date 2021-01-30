@@ -11,6 +11,9 @@ TagManager:
   - Coin
   - Collectable
   - Enemy
+  - kolye1
+  - kolye2
+  - kolye3
   layers:
   - Default
   - TransparentFX

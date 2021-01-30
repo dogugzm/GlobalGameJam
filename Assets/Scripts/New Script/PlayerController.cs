@@ -25,9 +25,9 @@ public class PlayerController : MonoBehaviour
     private float jumpBufferCount;                              //CAN: buffer geri sayım için variable
     public float health = 100;
     private bool doubleJump = false;                            //CAN: doublejump
-    private bool doubleJumpable = true;                        //CAN: DOUBLE JUMPABLE            **********
+    private bool doubleJumpable = false;                        //CAN: DOUBLE JUMPABLE            **********
     private bool dash = false;                               //CAN: dash state
-    private bool dashable = true;                          //CAN: DASHABLE                     **********
+    private bool dashable = false;                          //CAN: DASHABLE                     **********
 
     [SerializeField] public float dashPower = 10f;
 
@@ -75,12 +75,29 @@ public class PlayerController : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Collectable"))
+        if (collision.CompareTag("kolye1"))
         {
             collectedSound.Play();
             coinNumber++;
+            doubleJumpable = true;
             Destroy(collision.gameObject);
         }
+        else if (collision.CompareTag("kolye2"))
+        {
+            collectedSound.Play();
+            coinNumber++;
+            dashable = true;
+            Destroy(collision.gameObject);
+        }
+        else if (collision.CompareTag("kolye3"))
+        {
+            collectedSound.Play();
+            coinNumber++;
+            //doubleJumpable = true;
+            Destroy(collision.gameObject);
+        }
+
+
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -138,14 +155,17 @@ public class PlayerController : MonoBehaviour
             //rigidbody2D.velocity = new Vector2(velocity , rigidbody2D.velocity.y);
             transform.localScale = new Vector2(+1, 1);
         }
-
-        if (Input.GetButtonDown("Jump") && ((coll.IsTouchingLayers(groundLayer) || doubleJump == true) && doubleJumpable == true))       //CAN: doubleJump eklendi
+        if (Input.GetButtonDown("Jump") && ((coll.IsTouchingLayers(groundLayer) || doubleJump == true)))       //CAN: doubleJump eklendi
         {
-            jumpBufferCount = jumpBuffer;
+            if (doubleJumpable == true)
+            {
+                doubleJump = false;
+                jumpBufferCount = jumpBuffer;
+                Jump();
+                dash = true;
+            } 
             Jump();
-            doubleJump = false;
-            dash = true;
-
+            
         }
 
         // if (Input.GetButtonUp("Jump") && rigidbody2D.velocity.y > 0 && doubleJump == false)                                        //CAN: tuş çekince zıplamayı yarıda kesme eklendi
