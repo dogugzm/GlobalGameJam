@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerController : MonoBehaviour
 {
-
+    public GameObject trail;
     Rigidbody2D rigidbody2D;
     Animator anim;
     Collider2D coll;
@@ -18,9 +19,17 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float speed = 10f;
-    [SerializeField] private float jumpPower = 5f;
+    [SerializeField] private float jumpPower = 20f;
     [SerializeField] private float hurtForce = 10f;
+    [SerializeField] public float jumpBuffer = 1f;              //CAN: Jump buffer
+    private float jumpBufferCount;                              //CAN: buffer geri sayım için variable
     public float health = 100;
+    private bool doubleJump = false;                            //CAN: doublejump
+    private bool doubleJumpable = true;                        //CAN: DOUBLE JUMPABLE            **********
+    private bool dash = false;                               //CAN: dash state
+    private bool dashable = true;                          //CAN: DASHABLE                     **********
+
+    [SerializeField] public float dashPower = 10f;
 
 
     [Header("Collectibles")]
@@ -39,23 +48,24 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioSource collectedSound;
     [SerializeField] private AudioSource jump1Sound;
     [SerializeField] private AudioSource jump2Sound;
-    [SerializeField] private AudioSource landSound; 
+    [SerializeField] private AudioSource landSound;
     #endregion
 
 
-    
+
     private Vector2 currentVelocity;
 
+
     void Start()
-    { 
+    {
         rigidbody2D = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
     }
-    
+
     void Update()
     {
-         if (state != State.HURT)
+        if (state != State.HURT)
         {
             Movement();
         }
@@ -107,13 +117,18 @@ public class PlayerController : MonoBehaviour
 
         float velocity = hDirection * speed;
 
+        if (coll.IsTouchingLayers(groundLayer))                                              //CAN: doubleJump için yer kontrolü
+        {
+            doubleJump = true;
+        }
+
         if (canClimb && Mathf.Abs(Input.GetAxis("Vertical")) > .1f)
         {
             state = State.CLIMB;
         }
         if (hDirection < 0)
         {
-            rigidbody2D.velocity = Vector2.SmoothDamp( rigidbody2D.velocity,new Vector2(velocity , rigidbody2D.velocity.y), ref currentVelocity,0.02f);
+            rigidbody2D.velocity = Vector2.SmoothDamp(rigidbody2D.velocity, new Vector2(velocity, rigidbody2D.velocity.y), ref currentVelocity, 0.02f);
             transform.localScale = new Vector2(-1, 1);
         }
         else if (hDirection > 0)
@@ -124,9 +139,23 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector2(+1, 1);
         }
 
-        if (Input.GetButtonDown("Jump") && coll.IsTouchingLayers(groundLayer))
+        if (Input.GetButtonDown("Jump") && ((coll.IsTouchingLayers(groundLayer) || doubleJump == true) && doubleJumpable == true))       //CAN: doubleJump eklendi
         {
+            jumpBufferCount = jumpBuffer;
             Jump();
+            doubleJump = false;
+            dash = true;
+
+        }
+
+        // if (Input.GetButtonUp("Jump") && rigidbody2D.velocity.y > 0 && doubleJump == false)                                        //CAN: tuş çekince zıplamayı yarıda kesme eklendi
+        //{
+        //     rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, rigidbody2D.velocity.y * .1f);
+        // }
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dash == true && dashable == true)
+        {
+            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x * dashPower, rigidbody2D.velocity.y);
+            dash = false;
         }
     }
     private void Jump()
@@ -205,6 +234,6 @@ public class PlayerController : MonoBehaviour
     {
         landSound.Play();
     }
-} 
+}
 #endregion
 
