@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public GameObject trail;
+    public GameObject[] trails;
     Rigidbody2D rigidbody2D;
     Animator anim;
     Collider2D coll;
@@ -62,9 +62,25 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
     }
+    public void ChangeTrail()
+    {
+        if (doubleJumpable==true)
+        {
+            trails[0].SetActive(false);
+            trails[1].SetActive(true);
+        }
+        else if (dashable==true)
+        {
+            trails[0].SetActive(false);
+            trails[1].SetActive(false);
+            trails[2].SetActive(true);
+        }
+    }
 
     void Update()
     {
+        ChangeTrail();
+
         if (state != State.HURT)
         {
             Movement();
