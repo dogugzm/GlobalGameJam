@@ -79,14 +79,14 @@ public class PlayerController : MonoBehaviour
         {
             collectedSound.Play();
             coinNumber++;
-            doubleJumpable = true;
+            dashable = true;
             Destroy(collision.gameObject);
         }
         else if (collision.CompareTag("kolye2"))
         {
             collectedSound.Play();
             coinNumber++;
-            dashable = true;
+            doubleJumpable = true;
             Destroy(collision.gameObject);
         }
         else if (collision.CompareTag("kolye3"))
@@ -96,8 +96,6 @@ public class PlayerController : MonoBehaviour
             //doubleJumpable = true;
             Destroy(collision.gameObject);
         }
-
-
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -155,17 +153,22 @@ public class PlayerController : MonoBehaviour
             //rigidbody2D.velocity = new Vector2(velocity , rigidbody2D.velocity.y);
             transform.localScale = new Vector2(+1, 1);
         }
-        if (Input.GetButtonDown("Jump") && ((coll.IsTouchingLayers(groundLayer) || doubleJump == true)))       //CAN: doubleJump eklendi
+
+        if (Input.GetButtonDown("Jump") && coll.IsTouchingLayers(groundLayer))     //CAN: dash ve double jump booleanları aktive edildi
         {
-            if (doubleJumpable == true)
-            {
-                doubleJump = false;
-                jumpBufferCount = jumpBuffer;
-                Jump();
-                dash = true;
-            } 
+            jumpBufferCount = jumpBuffer;
             Jump();
-            
+            doubleJump = true;
+            dash = true;
+
+        }
+        if (Input.GetButtonDown("Jump") && doubleJump == true && doubleJumpable == true)       //CAN: doubleJump eklendi
+        {
+            jumpBufferCount = jumpBuffer;
+            Jump();
+            doubleJump = false;
+            dash = true;
+
         }
 
         // if (Input.GetButtonUp("Jump") && rigidbody2D.velocity.y > 0 && doubleJump == false)                                        //CAN: tuş çekince zıplamayı yarıda kesme eklendi
