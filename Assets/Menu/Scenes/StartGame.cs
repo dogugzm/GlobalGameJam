@@ -7,6 +7,9 @@ using UnityEngine.SceneManagement;
 
 public class StartGame : MonoBehaviour
 {
+    public GameObject Main;
+    public GameObject Credits;
+
 
     Animator animator;
     public AudioSource blip;
@@ -31,9 +34,16 @@ public class StartGame : MonoBehaviour
 
     public void StartCredits()
     {
-        
 
-        SceneManager.LoadScene("SampleScene");
+        Main.SetActive(false);
+        Credits.SetActive(true);
+        
+    }
+
+    public void BackMenu()
+    {
+        Main.SetActive(true);
+        Credits.SetActive(false);
     }
     public void QuitGame()
     {
@@ -46,5 +56,6 @@ public class StartGame : MonoBehaviour
     {
         blip.Play();
     }
+
 
 }

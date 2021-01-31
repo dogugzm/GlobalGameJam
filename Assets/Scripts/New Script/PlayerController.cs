@@ -68,13 +68,13 @@ public class PlayerController : MonoBehaviour
         {
             trails[0].SetActive(false);
             trails[1].SetActive(true);
+            if (dashable == true)
+            {
+                trails[1].SetActive(false);
+                trails[2].SetActive(true);
+            }
         }
-        else if (dashable==true)
-        {
-            trails[0].SetActive(false);
-            trails[1].SetActive(false);
-            trails[2].SetActive(true);
-        }
+        
     }
 
     void Update()

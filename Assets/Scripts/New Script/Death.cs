@@ -8,6 +8,9 @@ public class Death : MonoBehaviour
 {
     PlayerController playerController;
     [SerializeField] private GameObject deathBlack;
+    
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,7 +38,8 @@ public class Death : MonoBehaviour
 
     public void DeathProcess()
     {
+
         deathBlack.SetActive(true);
-        Invoke("Restart", 1.5f);
+        Invoke("Restart",3f);
     }
 }
