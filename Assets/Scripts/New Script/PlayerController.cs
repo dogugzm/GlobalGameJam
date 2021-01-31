@@ -38,6 +38,9 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public bool canClimb = false;
 
+    public GameObject FirstScene;
+    public GameObject SecondScene;
+
 
     #region SoundVariables
     [Header("Sounds")]
@@ -66,15 +69,26 @@ public class PlayerController : MonoBehaviour
     {
         if (doubleJumpable==true)
         {
+            PlayFirstCutscene();
             trails[0].SetActive(false);
             trails[1].SetActive(true);
             if (dashable == true)
             {
+                PlaySecondCutscene();
                 trails[1].SetActive(false);
                 trails[2].SetActive(true);
             }
         }
         
+    }
+
+    private void PlayFirstCutscene()
+    {
+        FirstScene.SetActive(true);
+    }
+    private void PlaySecondCutscene()
+    {
+        SecondScene.SetActive(true);
     }
 
     void Update()
