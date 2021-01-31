@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class Death : MonoBehaviour
 {
-    PlayerController playerController;
+    
+    GameObject player;
     [SerializeField] private GameObject deathBlack;
     
 
@@ -14,7 +15,8 @@ public class Death : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerController = GetComponent<PlayerController>();
+        player = GameObject.Find("newPlayer");
+        
     }
 
     // Update is called once per frame
@@ -28,12 +30,15 @@ public class Death : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             DeathProcess();
+           
+            
         }
     }
 
     public void  Restart()
     {
-        SceneManager.LoadScene("SampleScene");
+        //SceneManager.LoadScene("SampleScene");
+        player.GetComponent<Transform>().position = player.GetComponent<PlayerController>().spawnObject.transform.position;
     }
 
     public void DeathProcess()

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayAudio : MonoBehaviour
+public class StopAnim : MonoBehaviour
 {
-
-    public AudioSource music1;
+    public GameObject death;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,7 +16,8 @@ public class PlayAudio : MonoBehaviour
     {
         
     }
-
-
-
+    public void StopAnimation()
+    {
+        death.SetActive(false);
+    }
 }

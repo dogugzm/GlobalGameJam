@@ -12,9 +12,9 @@ public class PlayerController : MonoBehaviour
     Collider2D coll;
 
 
-    private enum State { IDLE, RUNNING, JUMPING, FALLING, HURT, CLIMB }
+    public enum State { IDLE, RUNNING, JUMPING, FALLING, HURT, CLIMB }
     [Header("States")]
-    [SerializeField] private State state = State.IDLE;
+     public State state = State.IDLE;
 
     [Header("Movement")]
     [SerializeField] private LayerMask groundLayer;
@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     public GameObject FirstScene;
     public GameObject SecondScene;
 
+    public GameObject spawnObject;
 
     #region SoundVariables
     [Header("Sounds")]
@@ -95,6 +96,8 @@ public class PlayerController : MonoBehaviour
     {
         ChangeTrail();
 
+
+
         if (state != State.HURT)
         {
             Movement();
@@ -126,6 +129,33 @@ public class PlayerController : MonoBehaviour
             //doubleJumpable = true;
             Destroy(collision.gameObject);
         }
+
+        else if (collision.CompareTag("Spawn1"))
+        {
+            spawnObject.transform.position = collision.transform.position;
+        }
+        else if (collision.CompareTag("Spawn2"))
+        {
+            spawnObject.transform.position = collision.transform.position;
+        }
+        else if (collision.CompareTag("Spawn3"))
+        {
+            spawnObject.transform.position = collision.transform.position;
+        }
+        else if (collision.CompareTag("Spawn4"))
+        {
+            spawnObject.transform.position = collision.transform.position;
+        }
+        else if (collision.CompareTag("Spawn5"))
+        {
+            spawnObject.transform.position = collision.transform.position;
+        }
+        else if (collision.CompareTag("Spawn6"))
+        {
+            spawnObject.transform.position = collision.transform.position;
+        }
+
+
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -140,18 +170,18 @@ public class PlayerController : MonoBehaviour
             else
             {
                 state = State.HURT;
-                if (this.transform.position.x < collision.gameObject.transform.position.x)
-                {
-                    playerHurtSound.Play();
-                    rigidbody2D.velocity = new Vector2(-hurtForce, rigidbody2D.velocity.y);
-                    health -= 50;
-                }
-                else
-                {
-                    playerHurtSound.Play();
-                    rigidbody2D.velocity = new Vector2(hurtForce, rigidbody2D.velocity.y);
-                    health -= 50;
-                }
+                //if (this.transform.position.x < collision.gameObject.transform.position.x)
+                //{
+                //    playerHurtSound.Play();
+                //    rigidbody2D.velocity = new Vector2(-hurtForce, rigidbody2D.velocity.y);
+                //    health -= 50;
+                //}
+                //else
+                //{
+                //    playerHurtSound.Play();
+                //    rigidbody2D.velocity = new Vector2(hurtForce, rigidbody2D.velocity.y);
+                //    health -= 50;
+                //}
             }
 
         }
